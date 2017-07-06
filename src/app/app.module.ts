@@ -1,18 +1,20 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+// Modules
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
+import {AppRoutingModule} from './modules/app-routing/app-routing.module';
+import {HttpModule} from '@angular/http';
 
 // Components
-import { AppComponent } from './app.component';
-import { HeroDetailComponent } from './components/hero-detail/hero-detail.component';
-import { HeroesComponent } from './components/heroes/heroes.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import {AppComponent} from './app.component';
+import {HeroDetailComponent} from './components/hero-detail/hero-detail.component';
+import {HeroesComponent} from './components/heroes/heroes.component';
+import {DashboardComponent} from './components/dashboard/dashboard.component';
 
 // Services
-import {HeroService} from './services/hero.service';
-
-// Modules
-import {AppRoutingModule} from './modules/app-routing/app-routing.module';
+import {HeroService} from './services/hero/hero.service';
+import {InMemoryDataService} from './services/in-memory-data.service';
+import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import {AppRoutingModule} from './modules/app-routing/app-routing.module';
     AppComponent,
     HeroDetailComponent,
     HeroesComponent,
-    DashboardComponent
+    DashboardComponent,
+    HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService)
   ],
   imports: [
     BrowserModule,
@@ -35,4 +39,5 @@ import {AppRoutingModule} from './modules/app-routing/app-routing.module';
   ]
 })
 
-export class AppModule { }
+export class AppModule {
+}

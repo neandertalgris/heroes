@@ -1,17 +1,29 @@
 import {Injectable} from '@angular/core';
+import {Headers, Http} from '@angular/http';
 
-import {Hero} from '../models/hero';
-import {HEROES} from '../mock-heroes';
+import {Hero} from '../../models/hero';
+
+import 'rxjs/add/operator/toPromise';
+
 
 @Injectable()
 export class HeroService {
+
+  private heroesUrl = 'api/heroes';
+
+  constructor(private http: Http) {
+  }
 
   /**
    * Get Heroes
    * @returns {Promise<Hero[]>}
    */
   getHeroes(): Promise<Hero[]> {
-    return Promise.resolve(HEROES);
+
+    return this.http.get(this.heroesUrl)
+      .toPromise()
+      .then(response => response.json().data as Hero[])
+      .catch(this.handleError);
   }
 
   /**
@@ -33,5 +45,15 @@ export class HeroService {
       // Simulate server latency with 1 second delay
       setTimeout(() => resolve(this.getHeroes()), 1000);
     });
+  }
+
+  /**
+   * Handle error request
+   * @param error
+   * @returns {Promise<never>}
+   */
+  private handleError(error: any): Promise<any> {
+    console.log('An error occurred', error);
+    return Promise.reject(error.message || error);
   }
 }
