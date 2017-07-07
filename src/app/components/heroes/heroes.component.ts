@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Hero} from '../../models/hero'
-import {HeroService} from '../../services/hero/hero.service'
+import {Hero} from '../../models/hero';
+import {HeroService} from '../../services/hero/hero.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -24,7 +24,7 @@ export class HeroesComponent implements OnInit {
    * Get Heroes from Service
    */
   getHeroes(): void {
-    this.heroService.getHeroesSlowly().then(heroes => this.heroes = heroes);
+    this.heroService.getHeroes().then(heroes => this.heroes = heroes);
   }
 
   /**
@@ -38,15 +38,43 @@ export class HeroesComponent implements OnInit {
    * Select a Hero
    * @param hero
    */
-  onSelect(hero: Hero): void {
+  public onSelect(hero: Hero): void {
     this.selectedHero = hero;
   };
 
   /**
    * Go to detail Hero
    */
-  goToDetail(): void {
+  public goToDetail(): void {
     this.router.navigate(['/detail', this.selectedHero.id]);
+  }
+
+  /**
+   * Add new heroe
+   * @param name
+   */
+  public add(name: string): void {
+    name = name.trim();
+    if (!name) {
+      return;
+    }
+    this.heroService.create(name).then(hero => {
+      this.heroes.push(hero);
+      this.selectedHero = null;
+    });
+  }
+
+  /**
+   * Delete Hero
+   * @param hero
+   */
+  public delete(hero: Hero) {
+    this.heroService.delete(hero.id).then(() => {
+      this.heroes = this.heroes.filter(h => h !== hero);
+      if (this.selectedHero === hero) {
+        this.selectedHero = null;
+      }
+    });
   }
 
 }
